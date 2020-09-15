@@ -1,0 +1,374 @@
+аннотации @Conditional передается класс реализующий интерфейс Condition:
+public class MyCondition implements Condition {
+
+    @Override
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+
+        String property = context.getEnvironment().getProperty("app.SomeProperty");
+        return property.equals("someValue");
+    }
+}
+...
+@Conditional(MyCondition.class):
+
+@SpringBootApplication эквивалентна использованию @Configuration, @EnableAutoConfiguration и @ComponentScan
+
+Аннотация @EnableAutoConfiguration включает автоматическую настройку Spring
+ApplicationContext путем сканирования компонентов пути к классам и 
+регистрации бинов, соответствующих различным условиям.
+
+интерфейс Environment предоставляет доступ к профилям и свойствам(profiles and properties)
+
+Аннотация @EnableAutoConfiguration включает автоматическую настройку 
+Spring ApplicationContext путем сканирования компонентов пути к классам 
+и регистрации бинов, соответствующих различным условиям.
+
+@ConfigurationProperties переносит свойства из файла (application.properies - по умолчанию, 
+но его можно изменить с помощью @PropertySource) в поля класса:
+---application.properties---
+database.url=jdbc:postgresql:/localhost:5432/instance
+database.username=foo
+database.password=bar
+---java file---
+@ConfigurationProperties(prefix = "database")
+public class Database {
+    String url;
+    String username;
+    String password;
+ 
+    // standard getters and setters
+}
+
+@EnableConfigurationProperties(DataSourceProperties.class) позволяет автоматически связывать
+свойства в application.properties со свойствами класса DataSourceProperties.
+
+@PathVariable:
+@GetMapping(value="/users/{id}")
+    public User read(@PathVariable(value="id") int id){
+        return userService.find(id);
+    }
+
+@RequestBody перобразует тело HTTP запроса в параметр метода:
+@RequestMapping(value = "/page", method = RequestMethod.POST)
+public String savePage(@RequestBody String pageContent) {
+  //---
+}
+
+@Repository - механизм инкапсуляции поведения хранения, извлечения и поиска,
+который эмулирует коллекцию объектов. Это специализация аннотации @Component,
+позволяющая автоматически обнаруживать классы реализации с помощью сканирования
+пути к классам.
+
+Spring-boot-starter-parent имеет некоторые общие конфигурации для приложения 
+Spring Boot
+
+Spring-boot-maven-plugin обеспечивает поддержку Spring Boot в Maven, 
+позволяя нам упаковывать исполняемые JAR-файлы или WAR-архивы.
+
+DataSource - фабрика для подключения к любому физическому источнику данных. 
+Альтернатива средству DriverManager.
+
+spring.jpa.hibernate.ddl-auto настраивает параметр автоматического создания
+таблицы базы данных по классу снабженному аннотацией @Table(name="some_name")
+
+@Qualifier использовать если имеется несколько beans с одинаковым типом:
+--Configuration--
+@Bean(name = "h2DataSource")
+public DataSource h2DataSource(){
+    ....
+}
+@Bean(name = "mySqlDataSource")
+public DataSource mySqlDataSource(){
+    ....
+}
+--in some class--
+@Autowired
+@Qualifier("h2DataSource")
+DataSource dataSource;
+
+SnakeYAML будет автоматически предоставлен через spring-boot-starter
+
+---YAML file----
+wordpress:
+  menus:
+    - title: Home
+      name: Home
+      path: /
+    - title: About
+      name: About
+      path: /about
+  themes:
+    default-folder: /wp-content/themes/mkyong
+  servers:
+    - ip: 127.0.0.1
+      path: /dev1
+    - ip: 127.0.0.2
+      path: /dev2
+    - ip: 127.0.0.3
+      path: /dev3
+---тоже самое но в properties---
+wordpress.menus[0].title=Home
+wordpress.menus[0].name=Home
+wordpress.menus[0].path=/
+wordpress.menus[1].title=About
+wordpress.menus[1].name=About
+wordpress.menus[1].path=/about
+wordpress.themes.default-folder=/wp-content/themes/mkyong
+wordpress.servers[0].ip=127.0.0.1
+wordpress.servers[0].path=/dev1
+wordpress.servers[1].ip=127.0.0.2
+wordpress.servers[1].path=/dev2
+wordpress.servers[2].ip=127.0.0.3
+wordpress.servers[2].path=/dev3
+
+Класс YamlPropertySourceLoader можно использовать для предоставления YAML 
+в качестве PropertySource в Spring Environment. Это позволяет использовать 
+аннотацию @Value с placeholder синтаксисом для доступа к YAML properties.
+
+использование нескольких профилей в YAML:
+server:
+    address: 192.168.1.100
+---#Три тире, разделяющие два профиля, указывают на начало нового документа
+spring:
+    profiles: development
+server:
+    address: 127.0.0.1
+---
+spring:
+    profiles: production
+server:
+    address: 192.168.1.120
+
+YAML файл не может быть загружен с помощью @PropertySource. Но можно использовать
+@ConfigurationProperties.
+
+Аннотация @Order определяет порядок сортировки аннотированного компонента или бина
+(чем ниже число тем выше приоритет). Ему аналогичен интерфейс Ordered.
+@Component
+@Order(2)
+class Toyota extends Car {
+}
+@Component
+@Order(1)
+class Mazda extends Car {
+}
+@Component
+public class Cars {
+    @Autowired
+    List<Car> cars;//сначала добавыится Mazda затем Toyota
+}
+
+CommandLineRunner и ApplicationRunner указывает на то, что bean должен выполняться, когда он содержится 
+в SpringApplication. Их методы run будут выполнены прямо перед тем как Application.run() завершится.
+
+SpringApplication используется для запуска Spring приложения:
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args){
+        SpringApplication.run(Application.class, args);
+    }
+}
+
+аннотации @Autowired, @Resource и @Inject действуют аналогично.
+Но @Resource внедряет зависимости по следующему приоритету
+(https://www.baeldung.com/spring-annotations-resource-inject-autowire):
+Match by Name
+Match by Type
+Match by Qualifier
+-------------
+@Inject по этом:
+Match by Type
+Match by Qualifier
+Match by Name
+----------------
+А @Autowired по такому:
+Match by Type
+Match by Qualifier
+Match by Name
+
+@GeneratedValue может использовать 4 типа генерации
+(https://easyjava.ru/data/jpa/pervichnye-klyuchi-v-jpa/):
+AUTO
+IDENTITY
+SEQUENCE
+TABLE
+
+GenerationTipe.AUTO:
+поставщик сохраняемости должен выбрать подходящую стратегию для конкретной базы данных.
+
+GenerationTipe.IDENTITY:
+работает с базами, у которых есть специальные IDENTITY поля:
+CREATE TABLE JOURNAL (
+  ID BIGINT PRIMARY KEY AUTO_INCREMENT
+);
+
+GenerationTipe.SEQUENCE:
+использует встроенный в базы данных, такие как PostgreSQL или Oracle, 
+механизм генерации последовательных значений (sequence). Использование 
+этого генератора требует как создания отдельной sequence в базе данных:
+CREATE TABLE JOURNAL (
+  ID BIGINT PRIMARY KEY
+);
+CREATE SEQUENCE JPA_SEQUENCE START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
+Так и задания имени этой sequence в описании ключа:
+@Id
+@SequenceGenerator( name = "jpaSequence", sequenceName = "JPA_SEQUENCE", allocationSize = 1, initialValue = 1 )
+@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "jpaSequence")
+@Getter
+@Setter
+@Column(name = "id", nullable = false, updatable = false)
+private Long rowId;
+
+GenerationTipe.TABLE:
+не зависит от поддержки конкретной базой данных и хранит счётчики значений в отдельной таблице
+
+Интерфейс org.hibernate.Session является мостом между приложением и Hibernate. 
+С помощью сессий выполняются CRUD-операции с объектами-сущностями.
+
+аннотация @Embeddable указывает на то, что аннотируемый класс будет внедрен в другую сущность.
+Аннотация @Embedded используется для встраивания типа в другую сущность:
+@Embeddable
+public class ContactPerson {
+ 
+    private String firstName;
+ 
+    private String lastName;
+ 
+    private String phone;
+ 
+    // standard getters, setters
+}
+-----------------------
+@Entity
+public class Company {
+ 
+    @Id
+    @GeneratedValue
+    private Integer id;
+ 
+    private String name;
+ 
+    private String address;
+ 
+    private String phone;
+ 
+    @Embedded
+    @AttributeOverrides({
+      @AttributeOverride( name = "firstName", column = @Column(name = "contact_first_name")),
+      @AttributeOverride( name = "lastName", column = @Column(name = "contact_last_name")),
+      @AttributeOverride( name = "phone", column = @Column(name = "contact_phone"))
+    })
+    private ContactPerson contactPerson;
+ 
+    // standard getters, setters
+}
+
+Точка входа в приложение весенней загрузки — класс, содержащий аннотацию @SpringBootApplication и метод main.
+класс наследующий SpringBootServletInitializer также является отправной точкой для приложения spring boot
+
+SpringBootServletInitializer запускает SpringApplication из традиционного архива WAR
+
+@Autowired лучше не использовать над полем так как:
+1)поле нельзя будет объявить как final.
+2)Облегчает нарушение принципа единой ответственности
+3)если вы хотите использовать свой класс вне контейнера приложения 
+вы вынуждены использовать контейнер Spring для создания экземпляра своего класса,
+поскольку нет другого возможного способа (кроме отражения) установить поля autowired.
+
+профиль можно активировать с помощью ConfigurableEnviroment:
+@Autowired
+private ConfigurableEnvironment env;
+...
+env.setActiveProfiles("someProfile");
+
+@ActivateProfile используется для объявления, какие профили следует 
+использовать при загрузке ApplicationContext для тестовых классов.
+
+@RestController комбинирует @Controller и @ResponseBody. Она освобождает
+от необходимости  помечачать каждый метод @ResponseBody.
+
+@ResponseBody автоматические сериализует возвращаемый объект в HTTPResponse
+
+HttpResponse - результат отправки HttpRequest.
+
+NamedParameterJdbcTemplate позволяет использовать именованные 
+параметры в SQL-запросах.
+
+Data Access Object (DAO) — паттерн для сохранения объектов в базе данных. 
+В самом широком смысле, DAO — это класс, содержащий CRUD методы для 
+конкретной сущности.
+
+Сеттеры следует использовать для инъекций опциональных зависимостей. 
+Класс должен быть способен функционировать, даже если они не были предоставлены. 
+Зависимости могут быть изменены в любое время после создания объекта
+
+Инъекция через конструкторы хороша для обязательных зависимостей — тех, 
+которые требуются для корректной функциональности объекта
+
+DTO — это класс, содержащий данные без какой-либо логики для работы с ними.
+DTO обычно используются для передачи данных между различными приложениями, 
+либо между слоями внутри одного приложения. Их можно рассматривать как 
+хранилище информации, единственная цель которого — передать эту информацию 
+получателю.
+
+Value Object-ы могут содержать логику и обычно они не используются для 
+передачи информации между приложениями.
+
+mapping Entity в DTO:
+MapStruct
+ModelMapper
+
+уровни логирования:
+fatal
+error
+warn
+info
+debug
+trace
+
+для логирования:
+Logger log = LoggerFactory.getLogger(YourClass.class);
+...
+log.info("text");
+log.debug("text");
+
+классы обертки нужно исользуется для объектов, которые могут быть NULL в Entity и в id
+
+
+
+
+
+
+
+@ConfigurationProperties с @EnableconfigurationProperties и @Configuration?
+можно ли не использовать @Table?
+hibernate.ddl-auto?
+не загружаются данные из data.sql
+почему в некоторых зависимостях можно не указывать версию?
+не видит файл build-info.properties
+можно ли в yml файле вместо ":" использовать "."?
+куда я попадаю при http://localhost:8080/users/?
+@Entity
+@Table(name = "users")
+public class User implements Serializable {//нужен ли Serializable?
+    ...
+}
+
+лучше вообще не использовать dll-auto или не использовать только create-drop
+для создания базы данных использовать файл или автоматическуое создание?
+@SpringBootTest плохо?
+ 
+
+
+@Target
+@Retention
+@Documented
+@Conditional
+
+
+
+http://zetcode.com/springboot/repository/#:~:text=%40Repository%20is%20a%20Spring%20annotation,emulates%20a%20collection%20of%20objects.
+https://java.fandom.com/ru/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Search?query=%40Repository
+https://habr.com/ru/post/438870/
+https://docs.spring.io/spring/docs/current/javadoc-api/
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
