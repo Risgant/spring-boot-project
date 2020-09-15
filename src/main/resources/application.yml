@@ -1,0 +1,29 @@
+spring:
+  jpa:
+#    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_cration: true
+#    hibernate:
+#      ddl-auto:
+  datasource:
+#    platform: postgres
+    url: jdbc:postgresql://localhost:5432/test-db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: rdykjdfgclk20001311
+#    initialization-mode: always
+    data: classpath:database/userData.sql, classpath:database/productData.sql
+
+app:
+  version: @project.version@
+
+logging:
+  level:
+    root: info
+    com.example: trace
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5p) %clr(${PID}){magenta} --- [%15.15t] %clr(%-40.40logger{10}){cyan} : %m%n"
