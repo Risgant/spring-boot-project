@@ -7,16 +7,16 @@ spring:
         jdbc:
           lob:
             non_contextual_cration: true
-#    hibernate:
-#      ddl-auto:
+    hibernate:
+      ddl-auto: create-drop
   datasource:
 #    platform: postgres
-    url: jdbc:postgresql://localhost:5432/test-db
+    url: jdbc:postgresql://localhost:5432/store_3
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: rdykjdfgclk20001311
 #    initialization-mode: always
-    data: classpath:database/userData.sql, classpath:database/productData.sql
+#    data: classpath:database/userData.sql, classpath:database/productData.sql
 
 app:
   version: @project.version@

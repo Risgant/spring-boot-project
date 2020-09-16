@@ -14,25 +14,27 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-
 @Entity
-@Table(name = "products")
+@Table(name = "orders")
 @Getter
 @Setter
-public class Product {
+public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String title;
-    private double price;
-    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Seller seller;
+    @Temporal(TemporalType.DATE)
+    private Date date;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Customer customer;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "order_product",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<Order> orders = new ArrayList<>();
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products = new ArrayList<>();
 }
