@@ -1,7 +1,6 @@
 package com.example.repository;
 
 import com.example.model.Product;
-import com.example.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,21 +14,7 @@ import java.util.Optional;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @ActiveProfiles("test")
 class UserRepositoryTest {
-    private UserRepository userRepository;
     private ProductRepository productRepository;
-
-
-    @Test
-    void testFindAllUsers(){
-        Assertions.assertEquals(userRepository.findAll().size(), 6);
-    }
-
-    @Test
-    void testFindUser(){
-        User user = testFind(userRepository);
-        Assertions.assertEquals(user.getId(), Integer.valueOf(1));
-        Assertions.assertEquals(user.getName(), "Tom");
-    }
 
     @Test
     public void testFindAllProducts(){
