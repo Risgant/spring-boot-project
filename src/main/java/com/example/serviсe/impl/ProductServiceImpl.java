@@ -1,7 +1,7 @@
 package com.example.serviсe.impl;
 
 import com.example.exception.NoSuchObjectException;
-import com.example.exception.SuchObjectAlreadyExist;
+import com.example.exception.ObjectAlreadyExistException;
 import com.example.model.Product;
 import com.example.repository.ProductRepository;
 import com.example.serviсe.ProductService;
@@ -26,8 +26,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void create(Product product) {
-//        if(productRepository.findById(product.getId()).isPresent())
-//            throw new SuchObjectAlreadyExist();
+        if(productRepository.findById(product.getId()).isPresent())
+            throw new ObjectAlreadyExistException();
         productRepository.save(product);
     }
 

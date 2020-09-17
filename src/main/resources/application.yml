@@ -11,12 +11,12 @@ spring:
 #      ddl-auto: create
   datasource:
 #    platform: postgres
-    url: jdbc:postgresql://localhost:5432/store
+    url: jdbc:postgresql://localhost:5432/store_3
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: rdykjdfgclk20001311
-    data: classpath:database/sellerData.sql, classpath:database/productData.sql, classpath:database/customerData.sql, classpath:database/orderData.sql
-    initialization-mode: always
+#    data: classpath:database/sellerData.sql, classpath:database/customerData.sql, classpath:database/orderData.sql, classpath:database/productData.sql
+#    initialization-mode: always
 
 
 app:
