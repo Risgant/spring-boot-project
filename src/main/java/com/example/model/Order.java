@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +29,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Temporal(TemporalType.DATE)
-    private Date date;
+//    @Temporal(TemporalType.DATE)
+    private LocalDate date;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Customer customer;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -36,4 +38,6 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
+//    private BigDecimal bynAmount;
+//    private BigDecimal usdAmount;
 }

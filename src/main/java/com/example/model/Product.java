@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
-    private double price;
+    private BigDecimal price;
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Seller seller;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

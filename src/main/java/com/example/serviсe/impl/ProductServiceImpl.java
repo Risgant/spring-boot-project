@@ -1,6 +1,7 @@
 package com.example.serviсe.impl;
 
-import com.example.exception.NoSuchEntityException;
+import com.example.exception.NoSuchObjectException;
+import com.example.exception.SuchObjectAlreadyExist;
 import com.example.model.Product;
 import com.example.repository.ProductRepository;
 import com.example.serviсe.ProductService;
@@ -24,8 +25,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findById(int id) {
-        log.info("Fetching product with id {}", id);
-        return productRepository.findById(id).orElseThrow(NoSuchEntityException::new);
+    public void create(Product product) {
+//        if(productRepository.findById(product.getId()).isPresent())
+//            throw new SuchObjectAlreadyExist();
+        productRepository.save(product);
     }
+
+    @Override
+    public void update(Product product) {
+        Product newProduct = productRepository.findById(product.getId()).
+                orElseThrow(NoSuchObjectException::new);
+        newProduct.setOrder(product.getOrder());
+        newProduct.setPrice(product.getPrice());
+        newProduct.setSeller(product.getSeller());
+        newProduct.setTitle(product.getTitle());
+        productRepository.save(newProduct);
+    }
+
+    @Override
+    public void delete(Product product) {
+        if(!productRepository.findById(product.getId()).isPresent())
+            throw new NoSuchObjectException();
+        productRepository.delete(product);
+    }
+
+//    @Override
+//    public Product findById(int id) {
+//        log.info("Fetching product with id {}", id);
+//        return productRepository.findById(id).orElseThrow(NoSuchEntityException::new);
+//    }
 }

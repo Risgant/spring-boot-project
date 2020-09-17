@@ -7,8 +7,8 @@ spring:
         jdbc:
           lob:
             non_contextual_cration: true
-    hibernate:
-      ddl-auto: create
+#    hibernate:
+#      ddl-auto: create
   datasource:
 #    platform: postgres
     url: jdbc:postgresql://localhost:5432/store

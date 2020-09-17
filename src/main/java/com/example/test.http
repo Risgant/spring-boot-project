@@ -1,0 +1,12 @@
+POST http://localhost:8080/product/create
+Content-Type: application/json
+
+{
+  "id": 7,
+  "title": "water",
+  "price": 1.05,
+  "sellerId": 1,
+  "orderid": [1, 2, 3]
+}
+
+###
