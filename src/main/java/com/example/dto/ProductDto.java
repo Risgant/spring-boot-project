@@ -17,7 +17,7 @@ public class ProductDto implements Serializable {
     private String title;
     private BigDecimal price;
     private Integer sellerId;
-    private List<Integer> orderId;
+    private Integer orderId;
 //    private Seller seller;
 //    private List<Order> order;
 }

@@ -17,7 +17,8 @@ public class OrderDto implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
     private LocalDate date;
-//    private Customer customer;
-//    private List<Product> products;
-    private BigDecimal usdAmount;
+    private Integer customerId;
+    private List<Integer> productId;
+    private BigDecimal bynAmount;
+//    private BigDecimal usdAmount;
 }

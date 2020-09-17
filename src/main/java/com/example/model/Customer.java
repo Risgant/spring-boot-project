@@ -23,7 +23,7 @@ public class Customer {
     private Integer id;
     private String firstName;
     private String lastName;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
     private List<Order> orders;
 
 
