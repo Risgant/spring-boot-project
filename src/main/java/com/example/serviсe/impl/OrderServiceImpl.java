@@ -48,13 +48,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void update(Order order) {
+        List<Product> newProducts = productRepository.findAllById(order.getProducts().stream().
+                map(Product::getId).
+                collect(Collectors.toList()));
         Order newOrder = orderRepository.findById(order.getId()).
                 orElseThrow(NoSuchObjectException::new);
         newOrder.setCustomer(order.getCustomer());
+        List<Product> oldProducts = newOrder.getProducts();
         newOrder.setDate(order.getDate());
-        newOrder.setProducts(order.getProducts());
-
-//        newOrder.setUsdAmount(order.getUsdAmount());
+        oldProducts.forEach(p->p.setOrder(null));
+        newProducts.forEach(p->p.setOrder(newOrder));
+        newOrder.setProducts(newProducts);
+        newOrder.setBynAmount(newProducts.stream().map(Product::getPrice).
+                reduce(BigDecimal::add).
+                orElseThrow(NoSuchObjectException::new));
+        productRepository.saveAll(oldProducts);
+        productRepository.saveAll(newProducts);
         orderRepository.save(newOrder);
     }
 

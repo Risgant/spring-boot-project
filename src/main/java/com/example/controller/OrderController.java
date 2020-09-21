@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,19 +35,19 @@ public class OrderController {
     @GetMapping("/get_all")
     public List<OrderDto> read(){
         return orderService.findAll().stream().
-                map(p->modelMapper.map(p, OrderDto.class)).
+                map(p-> Pair.of(p, modelMapper.map(p, OrderDto.class))).
+                map(p-> {
+                    p.getSecond().setProductId(p.getFirst().
+                            getProducts().stream().map(Product::getId).
+                            collect(Collectors.toList()));
+                    return p.getSecond(); }).
                 collect(Collectors.toList());
-//        Stream<Pair<Order, OrderDto>> stream = orderService.findAll().stream()
-//                .map(p-> Pair.of(p, modelMapper.map(p, OrderDto.class)));
-//        stream.forEach(p-> p.getSecond().setProductId(p.getFirst().getProducts().stream().
-//                    map(Product::getId).collect(Collectors.toList())));
-//        return stream.map(Pair::getSecond).collect(Collectors.toList());
     }
 
     @GetMapping("/get_all_sorted")
     public List<OrderDto> readSorted(){
         List<OrderDto> list = read();
-        list.sort((a, b)-> a.getDate().compareTo(b.getDate()));
+        list.sort(Comparator.comparing(OrderDto::getDate));
         return list;
     }
 
@@ -57,7 +60,11 @@ public class OrderController {
 
     @PutMapping("/update")
     public void update(@RequestBody OrderDto orderDto){
-        orderService.update(modelMapper.map(orderDto, Order.class));
+        Order order = modelMapper.map(orderDto, Order.class);
+        if(orderDto.getProductId() == null)
+            orderDto.setProductId(new ArrayList<>());
+        order.setProducts(orderDto.getProductId().stream().map(Product::new).collect(Collectors.toList()));
+        orderService.update(order);
     }
 
     @DeleteMapping("/delete")
