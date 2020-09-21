@@ -32,17 +32,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void create(Order order) {
-        if(orderRepository.findById(order.getId()).isPresent())
-            throw new ObjectAlreadyExistException();
+//        if(order.getId() != null && orderRepository.findById(order.getId()).isPresent())
+//            throw new ObjectAlreadyExistException();
         List<Product> products = productRepository.findAllById(order.getProducts().stream().
                 map(Product::getId).
                 collect(Collectors.toList()));
         if(products.stream().anyMatch(p->p.getOrder()!=null))
             throw new ObjectAlreadyUsedException();
+        products.forEach(p->p.setOrder(order));
         BigDecimal num = products.stream().map(Product::getPrice).
                 reduce(BigDecimal::add).get();
         order.setBynAmount(products.stream().map(Product::getPrice).
                 reduce(BigDecimal::add).get());
+        productRepository.saveAll(products);
         orderRepository.save(order);
     }
 

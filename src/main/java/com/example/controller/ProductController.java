@@ -64,28 +64,4 @@ public class ProductController {
     public void delete(@RequestBody ProductDto productDto){
         productService.delete(modelMapper.map(productDto, Product.class));
     }
-
-
-//    @GetMapping("/{id}")
-//    public ProductDto read(@PathVariable("id") Integer id){
-//        return modelMapper.map(productService.findById(id), ProductDto.class);
-//    }
-
-//    @ExceptionHandler(NoSuchEntityException.class)
-//    public ModelAndView handleNoSuchEntityException(RuntimeException ex){
-//        log.error("Exception during fetching product");
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("error");
-//        modelAndView.addObject("message", "Exception during fetching product");
-//        return modelAndView;
-//    }
-//
-//    @ExceptionHandler(Exception.class)
-//    public ModelAndView handleAllExceptions(Exception ex){
-//        log.error("Exception in {} Class", ProductController.class.getSimpleName());
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("error");
-//        modelAndView.addObject("message", ex.getMessage());
-//        return modelAndView;
-//    }
 }

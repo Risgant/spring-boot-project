@@ -1,15 +1,14 @@
-PUT http://localhost:8080/order/update
+POST http://localhost:8080/order/create
 Content-Type: application/json
 
 {
-  "id": 1,
   "localeDate": "2020-09-01",
   "customerId": 2,
   "productId": [7,8]
 }
 
 //{
-//  "id": 5,
+//  "id": 12,
 //  "title": "meat",
 //  "price": 9.0,
 //  "sellerId": 1,
