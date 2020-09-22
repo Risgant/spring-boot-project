@@ -4,7 +4,7 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
-    data: classpath:database/h2UserData.sql, classpath:database/h2ProductData.sql
+    data: classpath:database/h2OrderData.sql, classpath:database/h2ProductData.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:

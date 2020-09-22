@@ -32,9 +32,9 @@ public class OrderController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/get_all")
-    public List<OrderDto> read(){
-        return orderService.findAll().stream().
+    @GetMapping("/get_page/{page}")
+    public List<OrderDto> read(@PathVariable int page){
+        return orderService.findPage(page).stream().
                 map(p-> Pair.of(p, modelMapper.map(p, OrderDto.class))).
                 map(p-> {
                     p.getSecond().setProductId(p.getFirst().
@@ -44,9 +44,9 @@ public class OrderController {
                 collect(Collectors.toList());
     }
 
-    @GetMapping("/get_all_sorted")
-    public List<OrderDto> readSorted(){
-        List<OrderDto> list = read();
+    @GetMapping("/get_page_sorted/{page}")
+    public List<OrderDto> readSorted(@PathVariable int page){
+        List<OrderDto> list = read(page);
         list.sort(Comparator.comparing(OrderDto::getDate));
         return list;
     }
@@ -54,7 +54,11 @@ public class OrderController {
     @PostMapping("/create")
     public void create(@RequestBody OrderDto orderDto){
         Order order = modelMapper.map(orderDto, Order.class);
-        order.setProducts(orderDto.getProductId().stream().map(Product::new).collect(Collectors.toList()));
+        order.setProducts(orderDto.getProductId().stream().map(id->{
+            Product product = new Product();
+            product.setId(id);
+            return product;
+        }).collect(Collectors.toList()));
         orderService.create(order);
     }
 
@@ -63,7 +67,11 @@ public class OrderController {
         Order order = modelMapper.map(orderDto, Order.class);
         if(orderDto.getProductId() == null)
             orderDto.setProductId(new ArrayList<>());
-        order.setProducts(orderDto.getProductId().stream().map(Product::new).collect(Collectors.toList()));
+        order.setProducts(orderDto.getProductId().stream().map(id->{
+            Product product = new Product();
+            product.setId(id);
+            return product;
+        }).collect(Collectors.toList()));
         orderService.update(order);
     }
 

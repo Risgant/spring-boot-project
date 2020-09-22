@@ -1,18 +1,19 @@
-POST http://localhost:8080/order/create
+GET http://localhost:8080/product/get_page/1
 Content-Type: application/json
 
-{
-  "localeDate": "2020-09-01",
-  "customerId": 2,
-  "productId": [7,8]
-}
+//{
+//  "id": 6,
+//  "localeDate": "2020-09-01",
+//  "customerId": 4,
+//  "productId": [20]
+//}
 
 //{
-//  "id": 12,
+//  "id": 28,
 //  "title": "meat",
-//  "price": 9.0,
+//  "price": 1.0,
 //  "sellerId": 1,
-//  "orderId": null
+//  "orderId": 2
 //}
 
 ###

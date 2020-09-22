@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,9 +29,9 @@ public class ProductController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/get_all")
-    public List<ProductDto> read(){
-        return  productService.findAll().stream().
+    @GetMapping("/get_page/{page}")
+    public List<ProductDto> read(@PathVariable int page){
+        return  productService.findPage(page).stream().
                 map(p->modelMapper.map(p, ProductDto.class)).
                 collect(Collectors.toList());
 //        Stream<Pair<Product, ProductDto>> stream = productService.findAll().stream()
@@ -42,10 +43,10 @@ public class ProductController {
 //        return stream.map(Pair::getSecond).collect(Collectors.toList());
     }
 
-    @GetMapping("/get_all_sorted")
-    public List<ProductDto> readSorted(){
-        List<ProductDto> list = read();
-        list.sort((a, b)-> a.getTitle().compareTo(b.getTitle()));
+    @GetMapping("/get_page_sorted/{page}")
+    public List<ProductDto> readSorted(int page){
+        List<ProductDto> list = read(page);
+        list.sort(Comparator.comparing(ProductDto::getTitle));
         return list;
     }
 

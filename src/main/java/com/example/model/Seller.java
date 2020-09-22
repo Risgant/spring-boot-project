@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 public class Seller {
     @Id
-    @SequenceGenerator(name = "seq_1", sequenceName = "seller_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "seq_1", sequenceName = "sellers_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_1")
     private Integer id;
     private String firstName;

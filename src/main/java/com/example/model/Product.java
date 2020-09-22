@@ -34,10 +34,4 @@ public class Product {
     private Seller seller;
     @ManyToOne(fetch = FetchType.EAGER)
     private Order order;
-
-    public Product(Integer id) {
-        this.id = id;
-    }
-    public Product() {
-    }
 }

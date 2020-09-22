@@ -21,7 +21,7 @@ public interface ProductService {
      *
      * @return the {@link List} of {@link Product} elements
      */
-    List<Product> findAll();
+    List<Product> findPage(int page);
 
     void create(Product product);
 

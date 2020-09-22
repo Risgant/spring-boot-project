@@ -5,7 +5,7 @@ import com.example.model.Order;
 import java.util.List;
 
 public interface OrderService {
-    List<Order> findAll();
+    List<Order> findPage(int page);
 
     void create(Order order);
 

@@ -10,6 +10,7 @@ import com.example.repository.ProductRepository;
 import com.example.serviсe.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,31 +26,29 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductRepository productRepository;
     @Override
-    public List<Order> findAll() {
+    public List<Order> findPage(int page) {
         log.info("fetching all orders");
-        return orderRepository.findAll();
+        return orderRepository.findAll(PageRequest.of(page, 5)).getContent();
     }
 
     @Override
     public void create(Order order) {
-//        if(order.getId() != null && orderRepository.findById(order.getId()).isPresent())
-//            throw new ObjectAlreadyExistException();
         List<Product> products = productRepository.findAllById(order.getProducts().stream().
                 map(Product::getId).
                 collect(Collectors.toList()));
         if(products.stream().anyMatch(p->p.getOrder()!=null))
             throw new ObjectAlreadyUsedException();
         products.forEach(p->p.setOrder(order));
-        BigDecimal num = products.stream().map(Product::getPrice).
-                reduce(BigDecimal::add).get();
         order.setBynAmount(products.stream().map(Product::getPrice).
-                reduce(BigDecimal::add).get());
-        productRepository.saveAll(products);
+                reduce(BigDecimal::add).orElse(BigDecimal.valueOf(0)));
+        order.setProducts(products);
         orderRepository.save(order);
     }
 
     @Override
     public void update(Order order) {
+//        if(order.getId() == null)
+//            throw new NoSuchObjectException("Id in Order object not specified");
         List<Product> newProducts = productRepository.findAllById(order.getProducts().stream().
                 map(Product::getId).
                 collect(Collectors.toList()));
@@ -65,14 +64,12 @@ public class OrderServiceImpl implements OrderService {
                 reduce(BigDecimal::add).
                 orElseThrow(NoSuchObjectException::new));
         productRepository.saveAll(oldProducts);
-        productRepository.saveAll(newProducts);
+//        productRepository.saveAll(newProducts);
         orderRepository.save(newOrder);
     }
 
     @Override
     public void delete(Order order) {
-        if(!orderRepository.findById(order.getId()).isPresent())
-            throw new NoSuchObjectException();
-        orderRepository.delete(order);
+        orderRepository.delete(orderRepository.findById(order.getId()).orElseThrow(NoSuchObjectException::new));
     }
 }

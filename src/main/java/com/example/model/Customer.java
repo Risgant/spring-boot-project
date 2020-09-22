@@ -20,7 +20,7 @@ import java.util.List;
 @Setter
 public class Customer {
     @Id
-    @SequenceGenerator(name = "seq_1", sequenceName = "db_seq_name", allocationSize = 1)
+    @SequenceGenerator(name = "seq_1", sequenceName = "customers_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_1")
     private Integer id;
     private String firstName;
