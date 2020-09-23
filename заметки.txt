@@ -374,7 +374,7 @@ public class User implements Serializable {//нужен ли Serializable?
 лучше вообще не использовать dll-auto или не использовать только create-drop
 для создания базы данных использовать файл или автоматическуое создание?
 @SpringBootTest плохо?
- 
+почему тестовые классы можно не объявлять public?
 
 
 @Target

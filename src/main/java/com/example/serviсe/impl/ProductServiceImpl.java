@@ -33,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void create(Product product) {
-        if(product.getOrder().getId() != null) {
+        if(product.getOrder() != null && product.getOrder().getId() != null) {
             Order order = orderRepository.findById(product.getOrder().getId()).orElseThrow(NoSuchObjectException::new);
             order.setBynAmount(order.getBynAmount().add(product.getPrice()));
             orderRepository.save(order);

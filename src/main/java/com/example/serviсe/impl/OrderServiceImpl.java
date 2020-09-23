@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -69,7 +70,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void delete(Order order) {
-        orderRepository.delete(orderRepository.findById(order.getId()).orElseThrow(NoSuchObjectException::new));
+        int orderId = order.getId();
+        orderRepository.deleteById(orderId);//delete(orderRepository.findById(order.getId()).orElseThrow(NoSuchObjectException::new));
+    }
+
+    @Override
+    @Transactional
+    public void delete(int orderId) {
+        try {
+            Order order = orderRepository.findById(orderId).orElseThrow();
+            orderRepository.delete(order);
+
+//            orderRepository.deleteById(orderId);
+        } catch (Throwable e) {
+            e.printStackTrace(System.out);
+        }
     }
 }

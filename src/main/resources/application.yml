@@ -1,5 +1,6 @@
 spring:
   jpa:
+    show-sql: true
 #    database: POSTGRESQL
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:
@@ -8,7 +9,7 @@ spring:
           lob:
             non_contextual_cration: true
 #    hibernate:
-#      ddl-auto: create
+#      ddl-auto: create-drop
   datasource:
 #    platform: postgres
     url: jdbc:postgresql://localhost:5432/store_3

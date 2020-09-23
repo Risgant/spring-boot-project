@@ -16,6 +16,7 @@
     </parent>
 
     <properties>
+        <java.version>11</java.version>
         <parent.version>2.3.3.RELEASE</parent.version>
         <lombok.version>1.18.12</lombok.version>
         <modelmapper.version>2.3.5</modelmapper.version>

@@ -28,7 +28,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_1")
     private Integer id;
     private LocalDate date;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
     @OneToMany(fetch = FetchType.EAGER,  mappedBy = "order", cascade = CascadeType.ALL)
     List<Product> products;

@@ -1,15 +1,14 @@
-GET http://localhost:8080/product/get_page/1
+DELETE http://localhost:8080/order/delete/4
+
+###
+DELETE http://localhost:8080/order/delete
 Content-Type: application/json
 
-//{
-//  "id": 6,
-//  "localeDate": "2020-09-01",
-//  "customerId": 4,
-//  "productId": [20]
-//}
+{
+  "id": 2
+}
 
 //{
-//  "id": 28,
 //  "title": "meat",
 //  "price": 1.0,
 //  "sellerId": 1,

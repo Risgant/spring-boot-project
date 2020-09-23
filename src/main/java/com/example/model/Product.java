@@ -30,8 +30,8 @@ public class Product {
     private Integer id;
     private String title;
     private BigDecimal price;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Seller seller;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
 }
