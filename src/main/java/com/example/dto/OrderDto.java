@@ -20,5 +20,4 @@ public class OrderDto implements Serializable {
     private Integer customerId;
     private List<Integer> productId;
     private BigDecimal bynAmount;
-//    private BigDecimal usdAmount;
 }

@@ -32,44 +32,41 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void create(Product product) {
+    public Product create(Product product) {
         if(product.getOrder() != null && product.getOrder().getId() != null) {
             Order order = orderRepository.findById(product.getOrder().getId()).orElseThrow(NoSuchObjectException::new);
             order.setBynAmount(order.getBynAmount().add(product.getPrice()));
             orderRepository.save(order);
         }
-        productRepository.save(product);
+        return productRepository.save(product);
     }
 
     @Override
-    public void update(Product product) {
+    public Product update(Product product) {
         Product newProduct = productRepository.findById(product.getId()).
                 orElseThrow(NoSuchObjectException::new);
         if(newProduct.getOrder() != null){
             Order order = newProduct.getOrder();
             order.setBynAmount(order.getBynAmount().subtract(newProduct.getPrice()));
-            orderRepository.save(order);
+            order.getProducts().remove(newProduct);
+            if(order.getProducts().size() == 0)
+                orderRepository.delete(order);
+            else
+                orderRepository.save(order);
         }
-        newProduct.setOrder(product.getOrder());
-        newProduct.setPrice(product.getPrice());
-        newProduct.setSeller(product.getSeller());
-        newProduct.setTitle(product.getTitle());
+
         if(product.getOrder() != null) {
-            Order order = orderRepository.findById(newProduct.getOrder().getId()).orElseThrow(NoSuchObjectException::new);
-            order.setBynAmount(order.getBynAmount().add(newProduct.getPrice()));
+            Order order = orderRepository.findById(product.getOrder().getId()).orElseThrow(NoSuchObjectException::new);
+            if(product.getPrice() != null)
+                order.setBynAmount(order.getBynAmount().add(product.getPrice()));
             orderRepository.save(order);
         }
-        productRepository.save(newProduct);
+        return productRepository.save(product);
     }
 
     @Override
-    public void delete(Product product) {
-        Product deletedProduct = productRepository.findById(product.getId()).orElseThrow(NoSuchObjectException::new);
+    public void delete(int id) {
+        Product deletedProduct = productRepository.findById(id).orElseThrow(NoSuchObjectException::new);
         productRepository.delete(deletedProduct);
-        if(deletedProduct.getOrder() != null && !productRepository.findById(deletedProduct.getId()).isPresent()){
-            Order order = orderRepository.findById(deletedProduct.getOrder().getId()).orElseThrow(NoSuchObjectException::new);
-            order.setBynAmount(order.getBynAmount().subtract(deletedProduct.getPrice()));
-            orderRepository.save(order);
-        }
     }
 }

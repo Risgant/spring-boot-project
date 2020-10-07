@@ -23,11 +23,11 @@ public interface ProductService {
      */
     List<Product> findPage(int page);
 
-    void create(Product product);
+    Product create(Product product);
 
-    void update(Product product);
+    Product update(Product product);
 
-    void delete(Product product);
+    void delete(int id);
 
 //    /**
 //     * Returns the {@link Product} element by its primary key

@@ -34,7 +34,7 @@ public class ProductController {
     }
 
     @GetMapping("/get_page_sorted/{page}")
-    public List<ProductDto> readSorted(int page){
+    public List<ProductDto> readSorted(@PathVariable int page){
         List<ProductDto> list = read(page);
         list.sort(Comparator.comparing(ProductDto::getTitle));
         return list;
@@ -51,8 +51,8 @@ public class ProductController {
         productService.update(modelMapper.map(productDto, Product.class));
     }
 
-    @DeleteMapping("/delete")
-    public void delete(@RequestBody ProductDto productDto){
-        productService.delete(modelMapper.map(productDto, Product.class));
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable int id){
+        productService.delete(id);
     }
 }

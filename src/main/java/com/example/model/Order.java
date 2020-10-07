@@ -30,7 +30,7 @@ public class Order {
     private LocalDate date;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToMany(fetch = FetchType.EAGER,  mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,  mappedBy = "order")
     List<Product> products;
     private BigDecimal bynAmount;
     private BigDecimal usdAmount;

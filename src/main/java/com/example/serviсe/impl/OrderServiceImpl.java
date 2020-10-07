@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void create(Order order) {
+    public Order create(Order order) {
         List<Product> products = productRepository.findAllById(order.getProducts().stream().
                 map(Product::getId).
                 collect(Collectors.toList()));
@@ -43,49 +43,33 @@ public class OrderServiceImpl implements OrderService {
         order.setBynAmount(products.stream().map(Product::getPrice).
                 reduce(BigDecimal::add).orElse(BigDecimal.valueOf(0)));
         order.setProducts(products);
-        orderRepository.save(order);
+        return orderRepository.save(order);
     }
 
     @Override
-    public void update(Order order) {
-//        if(order.getId() == null)
-//            throw new NoSuchObjectException("Id in Order object not specified");
+    public Order update(Order order) {
         List<Product> newProducts = productRepository.findAllById(order.getProducts().stream().
                 map(Product::getId).
                 collect(Collectors.toList()));
-        Order newOrder = orderRepository.findById(order.getId()).
+        if(order.getProducts().size() != newProducts.size())
+            throw new NoSuchObjectException();
+        Order oldOrder = orderRepository.findById(order.getId()).
                 orElseThrow(NoSuchObjectException::new);
-        newOrder.setCustomer(order.getCustomer());
-        List<Product> oldProducts = newOrder.getProducts();
-        newOrder.setDate(order.getDate());
+        List<Product> oldProducts = oldOrder.getProducts();
         oldProducts.forEach(p->p.setOrder(null));
-        newProducts.forEach(p->p.setOrder(newOrder));
-        newOrder.setProducts(newProducts);
-        newOrder.setBynAmount(newProducts.stream().map(Product::getPrice).
+        newProducts.forEach(p->p.setOrder(order));
+        order.setProducts(newProducts);
+        order.setBynAmount(newProducts.stream().map(Product::getPrice).
                 reduce(BigDecimal::add).
                 orElseThrow(NoSuchObjectException::new));
         productRepository.saveAll(oldProducts);
-//        productRepository.saveAll(newProducts);
-        orderRepository.save(newOrder);
-    }
-
-    @Override
-    @Transactional
-    public void delete(Order order) {
-        int orderId = order.getId();
-        orderRepository.deleteById(orderId);//delete(orderRepository.findById(order.getId()).orElseThrow(NoSuchObjectException::new));
+        return orderRepository.save(order);
     }
 
     @Override
     @Transactional
     public void delete(int orderId) {
-        try {
-            Order order = orderRepository.findById(orderId).orElseThrow();
-            orderRepository.delete(order);
-
-//            orderRepository.deleteById(orderId);
-        } catch (Throwable e) {
-            e.printStackTrace(System.out);
-        }
+        Order order = orderRepository.findById(orderId).orElseThrow(NoSuchObjectException::new);
+        orderRepository.delete(order);
     }
 }

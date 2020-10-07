@@ -75,13 +75,8 @@ public class OrderController {
         orderService.update(order);
     }
 
-    @DeleteMapping("/delete")
-    public void delete(@RequestBody OrderDto orderDto){
-        orderService.delete(modelMapper.map(orderDto, Order.class));
-    }
-
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable(name = "id") int id) {
+    public void delete(@PathVariable int id){
         orderService.delete(id);
     }
 }

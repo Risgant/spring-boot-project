@@ -1,11 +1,23 @@
-DELETE http://localhost:8080/order/delete/4
-
-###
-DELETE http://localhost:8080/order/delete
+PUT http://localhost:8080/order/update
 Content-Type: application/json
 
 {
-  "id": 2
+  "id": 1,
+  "date": "2020-09-10",
+  "customer_id": 1,
+  "bynAmount": 1,
+  "productId": [8]
+}
+
+###
+PUT http://localhost:8080/product/update
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "salt",
+  "price": 2,
+  "sellerId": 1
 }
 
 //{
