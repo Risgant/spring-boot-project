@@ -1,24 +1,24 @@
-PUT http://localhost:8080/order/update
-Content-Type: application/json
-
-{
-  "id": 1,
-  "date": "2020-09-10",
-  "customer_id": 1,
-  "bynAmount": 1,
-  "productId": [8]
-}
+GET http://localhost:8080/order?page=1&pageSize=2&sorted=true
+#Content-Type: application/json
+#
+#{
+#  "id": 7,
+#  "date": "2020-09-10",
+#  "customer_id": 1,
+#  "bynAmount": 7.5,
+#  "productId": [4]
+#}
 
 ###
-PUT http://localhost:8080/product/update
-Content-Type: application/json
-
-{
-  "id": 1,
-  "title": "salt",
-  "price": 2,
-  "sellerId": 1
-}
+DELETE http://localhost:8080/product/delete/4
+#Content-Type: application/json
+#
+#{
+#  "id": 4,
+#  "title": "carrot",
+#  "price": 0.6,
+#  "sellerId": 1
+#}
 
 //{
 //  "title": "meat",

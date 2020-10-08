@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Comparator;
@@ -26,32 +27,33 @@ public class ProductController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/get_page/{page}")
-    public List<ProductDto> read(@PathVariable int page){
-        return  productService.findPage(page).stream().
+    @GetMapping
+    public List<ProductDto> read(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize,
+    @RequestParam(defaultValue = "false") boolean sorted){
+        return  productService.findAll(page, pageSize, sorted).stream().
                 map(p->modelMapper.map(p, ProductDto.class)).
                 collect(Collectors.toList());
     }
 
-    @GetMapping("/get_page_sorted/{page}")
-    public List<ProductDto> readSorted(@PathVariable int page){
-        List<ProductDto> list = read(page);
-        list.sort(Comparator.comparing(ProductDto::getTitle));
-        return list;
-    }
+//    @GetMapping("/get_page_sorted/{page}")
+//    public List<ProductDto> readSorted(@PathVariable int page){
+//        List<ProductDto> list = read(page);
+//        list.sort(Comparator.comparing(ProductDto::getTitle));
+//        return list;
+//    }
 
-    @PostMapping("/create")
+    @PostMapping
     public void create(@RequestBody ProductDto productDto){
         Product product = modelMapper.map(productDto, Product.class);
         productService.create(product);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public void update(@RequestBody ProductDto productDto){
         productService.update(modelMapper.map(productDto, Product.class));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable int id){
         productService.delete(id);
     }

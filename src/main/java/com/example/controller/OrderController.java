@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.OrderDto;
-import com.example.dto.ProductDto;
 import com.example.model.Order;
 import com.example.model.Product;
 import com.example.serviсe.OrderService;
@@ -15,14 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/order")
@@ -32,9 +29,10 @@ public class OrderController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/get_page/{page}")
-    public List<OrderDto> read(@PathVariable int page){
-        return orderService.findPage(page).stream().
+    @GetMapping
+    public List<OrderDto> read(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize,
+                               @RequestParam(defaultValue = "false") boolean sorted){
+        return orderService.findAll(page, pageSize, sorted).stream().
                 map(p-> Pair.of(p, modelMapper.map(p, OrderDto.class))).
                 map(p-> {
                     p.getSecond().setProductId(p.getFirst().
@@ -43,15 +41,15 @@ public class OrderController {
                     return p.getSecond(); }).
                 collect(Collectors.toList());
     }
+//
+//    @GetMapping("/get_page_sorted/{page}")
+//    public List<OrderDto> readSorted(@PathVariable int page){
+//        List<OrderDto> list = read(page);
+//        list.sort(Comparator.comparing(OrderDto::getDate));
+//        return list;
+//    }
 
-    @GetMapping("/get_page_sorted/{page}")
-    public List<OrderDto> readSorted(@PathVariable int page){
-        List<OrderDto> list = read(page);
-        list.sort(Comparator.comparing(OrderDto::getDate));
-        return list;
-    }
-
-    @PostMapping("/create")
+    @PostMapping
     public void create(@RequestBody OrderDto orderDto){
         Order order = modelMapper.map(orderDto, Order.class);
         order.setProducts(orderDto.getProductId().stream().map(id->{
@@ -62,7 +60,7 @@ public class OrderController {
         orderService.create(order);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public void update(@RequestBody OrderDto orderDto){
         Order order = modelMapper.map(orderDto, Order.class);
         if(orderDto.getProductId() == null)
@@ -75,7 +73,7 @@ public class OrderController {
         orderService.update(order);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable int id){
         orderService.delete(id);
     }

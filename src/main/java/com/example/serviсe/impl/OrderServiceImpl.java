@@ -1,7 +1,6 @@
 package com.example.serviсe.impl;
 
 import com.example.exception.NoSuchObjectException;
-import com.example.exception.ObjectAlreadyExistException;
 import com.example.exception.ObjectAlreadyUsedException;
 import com.example.model.Order;
 import com.example.model.Product;
@@ -11,6 +10,7 @@ import com.example.serviсe.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +26,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductRepository productRepository;
+//    @Override
+//    public List<Order> findPage(int page) {
+//        log.info("fetching all orders");
+//        return orderRepository.findAll(PageRequest.of(page, 5)).getContent();
+//    }
+
     @Override
-    public List<Order> findPage(int page) {
+    public List<Order> findAll(int page, int pageSize, boolean sorted) {
         log.info("fetching all orders");
-        return orderRepository.findAll(PageRequest.of(page, 5)).getContent();
+        if(!sorted)
+            return orderRepository.findAll(PageRequest.of(page, pageSize)).getContent();
+        else
+            return orderRepository.findAll(PageRequest.of(page, pageSize, Sort.by("date"))).getContent();
     }
 
     @Override
@@ -67,7 +76,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public void delete(int orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(NoSuchObjectException::new);
         orderRepository.delete(order);

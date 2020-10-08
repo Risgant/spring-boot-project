@@ -1,7 +1,6 @@
 package com.example.serviсe.impl;
 
 import com.example.exception.NoSuchObjectException;
-import com.example.exception.ObjectAlreadyExistException;
 import com.example.model.Order;
 import com.example.model.Product;
 import com.example.repository.OrderRepository;
@@ -10,9 +9,9 @@ import com.example.serviсe.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -26,9 +25,12 @@ public class ProductServiceImpl implements ProductService {
     private OrderRepository orderRepository;
 
     @Override
-    public List<Product> findPage(int page) {
+    public List<Product> findAll(int page, int pageSize, boolean sorted) {
         log.info("Fetching all products");
-        return productRepository.findAll(PageRequest.of(page, 5)).getContent();
+        if(!sorted)
+            return productRepository.findAll(PageRequest.of(page, 5)).getContent();
+        else
+            return productRepository.findAll(PageRequest.of(page, 5, Sort.by("title").descending())).getContent();
     }
 
     @Override

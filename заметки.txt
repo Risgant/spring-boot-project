@@ -349,6 +349,10 @@ PATCH - используется для частичного изменения 
 
 для тестирования отдельных элементов использовать @DataJpaTest
 
+@DataJpaTest, @WebMvcTest, and @SpringBootTest содержать @ExtendWith
+
+RestTemplate для интеграционных тестов, MockMvc для unit-тестов
+
 
 
 
@@ -375,7 +379,8 @@ public class User implements Serializable {//нужен ли Serializable?
 для создания базы данных использовать файл или автоматическуое создание?
 @SpringBootTest плохо?
 почему тестовые классы можно не объявлять public?
-
+Если @ResponseBody поместить над классом, то он применяется для всех методов?
+как тестировать OrderServise.delete, ProductService.delete?
 
 @Target
 @Retention

@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.model.Order;
 import com.example.model.Product;
 import com.example.repository.OrderRepository;
 import com.example.repository.ProductRepository;
@@ -18,8 +17,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,16 +43,16 @@ public class ProductServiceTest {
     OrderRepository orderRepository;
 
     @Test
-    public void testFindFirstPage() {
+    public void findAllTest() {
         PageRequest pageRequest = PageRequest.of(0, 5);
         Product product = createProduct(1, 2.0);
         Page page = new PageImpl(List.of(product, product, product, product, product));
         when(productRepository.findAll(pageRequest)).thenReturn(page);
-        Assertions.assertEquals(5, productService.findPage(0).size());
+        Assertions.assertEquals(5, productService.findAll(0, 5, false).size());
     }
 
     @Test
-    public void testCreate(){
+    public void createTest(){
         Product product = createProduct(1, 2.0);
         when(productRepository.save(product)).thenReturn(product);
         Product product1 = productService.create(product);
@@ -64,11 +61,12 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdate(){
+    public void udateTest(){
         Product product = createProduct(1, 2.0);
         Product oldProduct = createProduct(1, 3.0);
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(oldProduct));
         when(productRepository.save(product)).thenReturn(product);
+        productService.update(product);
         Assertions.assertEquals(1, product.getId());
         Assertions.assertEquals(BigDecimal.valueOf(2.0), product.getPrice());
     }
