@@ -24,8 +24,8 @@ import java.util.List;
 @Setter
 public class Order {
     @Id
-    @SequenceGenerator(name = "seq_1", sequenceName = "orders_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_1")
+//    @SequenceGenerator(name = "seq_1", sequenceName = "orders_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDate date;
     @ManyToOne(fetch = FetchType.LAZY)

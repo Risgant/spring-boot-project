@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +27,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductRepository productRepository;
-//    @Override
-//    public List<Order> findPage(int page) {
-//        log.info("fetching all orders");
-//        return orderRepository.findAll(PageRequest.of(page, 5)).getContent();
-//    }
 
     @Override
     public List<Order> findAll(int page, int pageSize, boolean sorted) {

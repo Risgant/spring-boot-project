@@ -1,9 +1,9 @@
-INSERT INTO orders (byn_amount, date, usd_amount, customer_id) VALUES (3.5, '1/9/2020', 0, 1),
-                                                                      (1.0,'1/9/2020', 0, 2),
-                                                                      (0.59,'25/8/2020', 0, 3),
-                                                                      (0,'10/9/2020', 0, 1),
-                                                                      (5.34,'7/9/2020', 0, 4),
-                                                                      (0,'30/8/2020',  0, 4);
+INSERT INTO orders (byn_amount, date, usd_amount, customer_name) VALUES (3.5, '1/9/2020', 0, 'Roman'),
+                                                                      (1.0,'1/9/2020', 0, 'Lida'),
+                                                                      (0.59,'25/8/2020', 0, 'Nina'),
+                                                                      (3.19,'10/9/2020', 0, 'Roman'),
+                                                                      (2.15,'7/9/2020', 0, 'Maksim'),
+                                                                      (5.0,'30/8/2020',  0, 'Maksim');
 
 -- INSERT INTO orders VALUES (1, 3.5, '9/1/2020', 0, 2),
 --                             (2, 1.0,'9/1/2020', 0, 2),
